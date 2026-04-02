@@ -33,21 +33,20 @@ app.use(cors({
 }));
 
 // ─── Rutas ────────────────────────────────────────────────────────────────────
-// dispatcher REAL
 app.use((req, res, next) => {
   const module = req.headers['x-module'];
 
   console.log('MODULE:', module, 'PATH:', req.path);
 
   if (module === 'usuarios') {
-  return userRoutes(req, res, next);
-}
+    return userRoutes.handle(req, res, next);
+  }
 
-if (module === 'roles') {
-  return roleRoutes(req, res, next);
-}
+  if (module === 'roles') {
+    return roleRoutes.handle(req, res, next);
+  }
 
-  return authRoutes(req, res, next);
+  return authRoutes.handle(req, res, next);
 });
 
 // ─── Health check ─────────────────────────────────────────────────────────────
