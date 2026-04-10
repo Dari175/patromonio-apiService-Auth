@@ -21,7 +21,7 @@ async function login(req, res) {
 
     const user = await User.findOne({ email: email.toLowerCase() })
       .select('+password +refreshTokens')
-      .populate('roles', 'nombre activo permisos'); // 🔥 IMPORTANTE
+    .populate('roles', 'nombre activo permisos nivel')
 
     if (!user) return unauthorized(res, 'Credenciales incorrectas');
     if (user.estado !== 'ALTA') return unauthorized(res, 'Cuenta inactiva');
@@ -77,8 +77,7 @@ async function refresh(req, res) {
 
     const user = await User.findById(decoded.sub)
       .select('+refreshTokens')
-      .populate('roles', 'nombre activo permisos'); // 🔥 IMPORTANTE
-
+      .populate('roles', 'nombre activo permisos nivel')
     if (!user || !user.refreshTokens.includes(refreshToken)) {
       return unauthorized(res, 'Refresh token revocado');
     }
